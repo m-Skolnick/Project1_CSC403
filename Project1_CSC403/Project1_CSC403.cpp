@@ -11,7 +11,7 @@ using namespace std;
 ifstream fromFile;
 ofstream toFile;
 int bytesInMemory;
-int bitsInMemory;
+int byteRepresentation;
 string dataFileName;
 string dataType;
 int dataValue;
@@ -28,25 +28,26 @@ string decToHex(int decimal) {
 	_itoa_s(decimal, buffer, 16); //Convert the decimal number to hexadecimal
 	return buffer;
 }
-
 string dbDialog() {
 	fromFile >> dataValue; //Get the data value
 	string stringToReturn = "";
-	stringToReturn = decToHex(dataValue);
-	if (dataValue > 0) {
+	stringToReturn = decToHex(dataValue);//Convert value to hex
+	if (stringToReturn.length() == 2) {
 		return stringToReturn;
-	}
-	else {
+	}//If the value was negative, the front of the hex number will be padded with FFF
+		// so cut off the extra FFF from the front before returning value
+	else if (stringToReturn.length() == 8) {
 		return stringToReturn.substr(6, 2);
 	}
 }
 string dwDialog() {
 	fromFile >> dataValue; //Get the data value
 	string stringToReturn = "";
-	stringToReturn = decToHex(dataValue);
+	stringToReturn = decToHex(dataValue);//Convert value to hex
 	if (stringToReturn.length() == 2) {
 		stringToReturn.insert(0, "00");
-	}
+	}//If the value was negative, the front of the hex number will be padded with FFF
+		// so cut off the extra FFF from the front before returning value
 	else if (stringToReturn.length() == 8) {
 		stringToReturn = stringToReturn.substr(4, 4);
 	}
@@ -59,7 +60,7 @@ string hbDialog() {
 string hwDialog() {
 	fromFile >> dataString; //Get the data value
 	if (dataString.length() == 2) {
-		dataString.insert(0, "00");
+		dataString.insert(0, "00"); //If the length is only one byte, pad the front
 	}
 	return dataString;
 }
@@ -80,34 +81,33 @@ string sDialog() {
 }
 void printResults() {
 	addressHeaderDec = 0;
-
-	for (int i = 0; i < bitsInMemory; i += 16) {
+	for (int i = 0; i < byteRepresentation; i += 16) {
 		string currAddressHex = decToHex(addressHeaderDec);
 		int length = 8 - currAddressHex.length();
 		for (int z = 0; z < length; z++) {
 			cout << 0; //Print out the number of 0s needed to get an 8 digit number
 		}
 		cout << currAddressHex << ": ";
-		cout << memory.substr(i, 16) << endl;;
+		cout << memory.substr(i, 16) << endl;; //Print the next 16 chars of memory
 		addressHeaderDec += 8; //Add 8 to the current memory address
 	}
 }
 void createMemory() {
-	for (int i = 0; i < bitsInMemory; i++) { //Pad out the memory for the number of bits needed
+	for (int i = 0; i < byteRepresentation; i++) {//Pad out the memory for the number of bytes needed
 		memory.append("0");
 	}
 }
 int main() {
-	//Initialize public variables
+		//Initialize public variables
 	bytesInMemory = 0;
 	dataFileName = "blank";
 	memory = "";
 	address = "00000000";
 	charCount = 0;
-	//Read in the number of bytes in memory, and the file name
+		//Read in the number of bytes in memory, and the file name
 	cout << "How many bytes in memory? ";
 	cin >> bytesInMemory;
-	bitsInMemory = bytesInMemory * 2;
+	byteRepresentation = bytesInMemory * 2;
 	cout << "Data file name? ";
 	cin >> dataFileName;
 	createMemory(); //Create the memory where data will be stored
@@ -133,8 +133,8 @@ int main() {
 		memory.replace(currAddress, dataStr.length(), dataStr);
 		currAddress += dataStr.length(); //Increase the current address location
 	}
-	printResults();
-	cout << endl << endl << "Enter any key to exit ";
+	printResults();//Print results to user
+	cout << endl << endl << "Enter any key to exit ";//Prompt user to exit
 	cin >> dataType;
 	return 0;
 }

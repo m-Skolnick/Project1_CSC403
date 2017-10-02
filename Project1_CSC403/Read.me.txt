@@ -4,4 +4,8 @@ Platform: Microsoft Visual Studio 2016 (Windows 10 - 64bit)
 No special steps should be required to compile project.
 
 Summary:
-NEED SUMMARY
+1. The program prompts the user to specify the number of bytes in memory, and the name of the input file.  
+2. Program memory is then created based on the number of bytes specified by the user. 
+3. Data from the input file is read, and processed based on the data type. 
+4. Starting with the left most byte, bytes in memory are replaced as data values are read from the input file. 
+5. The memory which was created is then displayed back to the user in a reader friendly format

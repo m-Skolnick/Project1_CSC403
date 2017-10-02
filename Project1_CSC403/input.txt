@@ -1,0 +1,13 @@
+db 17
+db -17
+hb af
+hb 02
+hb 20
+hw 2020
+hw 8080
+dw 17
+s Hello World
+hw abcd
+hw fedc
+hw ba98
+dw -17

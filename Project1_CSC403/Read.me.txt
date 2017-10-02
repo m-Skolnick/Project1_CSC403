@@ -1,0 +1,7 @@
+Name: Micaiah Skolnick
+Date: 10/01/17
+Platform: Microsoft Visual Studio 2016 (Windows 10 - 64bit)
+No special steps should be required to compile project.
+
+Summary:
+NEED SUMMARY
